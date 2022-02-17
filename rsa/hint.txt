@@ -1,0 +1,9 @@
+One of one UCLAs most famous buildings, Royce hall, has two towers that were built Asymetric, kind of like the asymmetry in RSA encryption, or the hashing in SHA256(hex equivalent).
+
+n = 988082649547634539735932714787069852964949779
+e = 65537
+q = 35742549198872617291353508656626642567
+
+(decimal to ASCII for resulting message)
+c = 327097033161733906765917941890866428911800925
+
