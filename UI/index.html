@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <style>
+        body { background-image: url('./images/ucla_bear.jpg'); background-attachment: fixed; background-repeat: no-repeat; background-size: 100% 100%; }
+    </style>
+    <title>CTF UCLA</title>
+</head>
+<script>
+    //make sure to add commas after questions to add to list. \n = newline \t = tab
+    var questions = [
+        "xlero csy jsv tpecmrk xlmw ygpe gleppirki xli jpek jsv xlmw keqi mw fvymrpievr\n \nOne of ucla's most famous athletes is jackie robinson. \nHe SHIFTed through FOUR sports at ucla including baseball, basketball, football and track at ucla. \nSince he was such an athlete he must have had a lot of CEASER salads, but no one can really CIPHER how he did it.",
+        "One of one UCLAs most famous buildings, Royce hall, has two towers that were built Asymetric, kind of like the asymmetry in RSA encryption, or the hashing in SHA256(hex equivalent). \nn = 988082649547634539735932714787069852964949779\ne = 65537\nq = 35742549198872617291353508656626642567\n(decimal to ASCII for resulting message)\nc = 327097033161733906765917941890866428911800925",
+        "made up q3",
+        "made up q4",
+        "made up q5",
+        "made up q6",
+        "made up q7",
+        "made up q8",
+        "made up q9"
+     ]
+    //flag answer
+    var flags = [
+        "bruinlearn",
+        "8FEE0B920B40F92916FDECD54021E0905FCA8CA1663BDF2AAAAE8F05D16235A5",
+        "UCLA",
+        "UCLA",
+        "UCLA",
+        "UCLA",
+        "UCLA",
+        "UCLA",
+        "UCLA",
+    ]
+    //appear as title of quuestion
+    var category = [
+        "Encryption",
+        "Encryption",
+        "EXAMPLE",
+        "EXAMPLE",
+        "EXAMPLE",
+        "EXAMPLE",
+        "EXAMPLE",
+        "EXAMPLE",
+        "EXAMPLE"
+    ]
+    //name of picture in images folder
+    var associated_img = [
+        "Jackie_Robinson.jpg", 
+        "Royce_Hall.jpg",
+        "Jackie_Robinson.jpg",
+        "Jackie_Robinson.jpg",
+        "Jackie_Robinson.jpg",
+        "Jackie_Robinson.jpg",
+        "Jackie_Robinson.jpg",
+        "Jackie_Robinson.jpg",
+        "Jackie_Robinson.jpg",
+    ]
+    //points associated with the question
+    var points = [
+        10,
+        20,
+        30,
+        40,
+        50,
+        60,
+        70,
+        80,
+        90
+    ]
+
+    var solution= [
+        "https://www.youtube.com/watch?v=hwvhlwWgsVw",
+        "https://www.youtube.com/watch?v=hwvhlwWgsVw",
+        "https://www.youtube.com/watch?v=hwvhlwWgsVw",
+        "https://www.youtube.com/watch?v=hwvhlwWgsVw",
+        "https://www.youtube.com/watch?v=hwvhlwWgsVw",
+        "https://www.youtube.com/watch?v=hwvhlwWgsVw",
+        "https://www.youtube.com/watch?v=hwvhlwWgsVw",
+        "https://www.youtube.com/watch?v=hwvhlwWgsVw",
+        "https://www.youtube.com/watch?v=hwvhlwWgsVw",
+        "https://www.youtube.com/watch?v=hwvhlwWgsVw" 
+    ]
+    
+    localStorage.setItem('questions', JSON.stringify(questions))
+    localStorage.setItem('flags', JSON.stringify(flags))
+    localStorage.setItem('category', JSON.stringify(category))
+    localStorage.setItem('associated_img', JSON.stringify(associated_img))
+    localStorage.setItem('points', JSON.stringify(points))
+    localStorage.setItem('solution', JSON.stringify(solution))
+    
+    function question_click(id_clicked){
+        var index = id_clicked - 1
+        localStorage.setItem('index', index)
+        //clear all borders
+        const buttons = document.querySelectorAll('.question_unanswered');
+        buttons.forEach(box => {  
+        box.style.border = 'none';
+        });
+
+        //add black border to button clicked
+        var elem = document.getElementById(`${id_clicked}`)
+        elem.style.border = "8px solid white"
+        show_question_info(parseInt(index))
+    }
+    function show_question_info(index){
+        //change picture and text displayed
+        document.getElementById('ucla_img').src = `./images/${associated_img[index]}`
+        document.getElementById('question_text').innerHTML = questions[index]
+    }
+
+    function check_flag(){
+        var index = localStorage.getItem('index')
+        var id_el = parseInt(index) + 1
+        var atmpt_ans = document.getElementById('flag_guess').value
+        var correct = JSON.parse(localStorage.getItem('correct'))
+        if (atmpt_ans == (flags[index])){
+            correct[index] = 'True' 
+            document.getElementById(`${id_el}`).style.background = 'green' 
+        }
+        else{
+            correct[index] = 'False' 
+            document.getElementById(`${id_el}`).style.background = 'rgb(250,250,21)'
+        }
+        localStorage.setItem('correct', JSON.stringify(correct))
+        calc_and_display_points( correct)
+    }
+    
+    function calc_and_display_points(correct){
+        var points = JSON.parse(localStorage.getItem('points'))
+        var score_total = 0
+        var possible_score = 0
+        var index = localStorage.getItem('index')
+        var id_el = parseInt(index) + 1
+        for (var i = 0; i < correct.length; i++){
+            if (correct[i] == 'True'){
+                score_total += points[i]     
+            }
+        }
+        for (var x= 0; x < points.length; x++){
+            possible_score += points[x]   
+        }
+        document.getElementById('point_score').innerHTML = `Points: ${score_total}/${possible_score}`
+    }
+
+    function reset_game(){
+        var correct = []
+        var questions = JSON.parse(localStorage.getItem('questions'))
+        for (var i = 0; i < questions.length; i++){
+            correct.push('False')
+        }
+        localStorage.setItem('correct', JSON.stringify(correct))
+        calc_and_display_points(correct)
+        //change back to yellow
+        for (var i = 0; i < questions.length; i++){
+            var id_el = parseInt(i) + 1
+            document.getElementById(`${id_el}`).style.background = 'rgb(250,250,21)'
+        }
+    }
+
+    function display_sol(){
+        var index = localStorage.getItem('index')
+        var solutions = JSON.parse(localStorage.getItem('solution'))
+        window.open(solutions[index], '_blank').focus();
+    }
+
+    //if no list of correct answers avaialble initiate
+    if (localStorage.getItem("correct") === null){
+        var correct = []
+        var questions = JSON.parse(localStorage.getItem('questions'))
+        for (var i = 0; i < questions.length; i++){
+            correct.push('False')
+        }
+        localStorage.setItem('correct', JSON.stringify(correct))
+    }
+    else {
+        correct = JSON.parse(localStorage.getItem('correct'))
+    }
+
+</script>
+<body>
+    <!--Top Menu-->
+    <div class = 'top_div'>
+        <p id = 'point_score' style="text-align: left; font-size: 3em; margin-top: 0px; background: rgb(31, 160, 247); color: white;display: inline-block;">Points: 0 </p>
+        <input type="button" onclick = "reset_game()" value="Reset" style="float: right;">
+    </div>
+    
+    <!--Question Buttons-->
+    <div id = 'center_questions' class="center_questions">   
+        <!--<button id = '1' class="question_unanswered" onclick = 'question_click("1")'>Question #3  <br> Category: Encryption<br> Points: 20<br></button>-->
+    </div>
+
+    <!--Bottom space -->
+    <div class = 'bottom_space'>
+
+    </div>
+
+    <!--Question Preview tile-->
+    <div class = 'flag_question'>
+        <!--Image-->
+        <div style = 'text-align: center; background: rgb(252, 218, 25); padding-top: 5px; padding-bottom: 5px;' class = 'question_picture'>
+            <img id = 'ucla_img' src = './images/Royce_Hall.jpg'>
+        </div>
+        
+        <!--Flag Submit-->
+        <div class = "flag_submit">
+            <label for="example">Flag</label>
+            <input id="flag_guess" type="text" >
+            <button id="submit_flag_btn" onclick="check_flag()">Check Flag</button>
+            <button id = 'vid_solution' onclick = "display_sol()"  style="float: right;">Solution</button>
+        </div>
+
+        <!--Question Text-->
+        <div id = 'question_text'>
+            
+        </div>
+    </div>
+
+</body>
+<script src="main.js" defer></script>
+</html>
