@@ -6,4 +6,4 @@ The website includes solution videos, point values and categories for each quest
 
 The website for the CTF can be found [here] (http://ctfucla.online/)
 
-![Test Image 1](/images/github_example.png)
+![Test Image 1](/images/github_example.PNG)
